@@ -1,0 +1,178 @@
+/*  nama         : najwa kurnia
+    nim          : 23343058
+    kasus program: pencatatan keuangan 
+*/
+#include <iostream>
+#include <algorithm>
+#include <iomanip>
+
+using namespace std;
+
+struct data{
+    string namaPmsk, namaklr;
+    int jmlMsk, jmlKlr;
+    string tglMsk, tglKlr;
+};
+//variabel global
+data pemasukan[30];//deklarasi array
+data pengeluaran[30];
+int totalMsk=0;
+int totalKlr=0;
+char tambah;
+//fungsi input pemasukan
+void inputPemasukan(data *mskUang){
+    do{
+        cout<< "\n============== PEMASUKAN KEUANGAN ==================\n";
+        cout<< "Nama pemasukan: "; cin.ignore();
+        getline(cin, mskUang[totalMsk].namaPmsk); 
+        cout<< "Tanggal pemasukan: "; 
+        getline(cin, mskUang[totalMsk]. tglMsk);
+        cout<< "Jumlah pemasukan: "; 
+        cin>> mskUang[totalMsk].jmlMsk;
+
+
+        totalMsk++;
+
+        cout<< "\ningin menambah pemasukan? (y/n)=> ";
+        cin>> tambah;
+    }while(tambah=='y'||tambah=='Y');
+ }
+ //fungsi input pengeluaran
+ void inputPengeluaran( data *klrUang){
+     do{
+        cout<< "\n============= PENGELUARAN KEUANGAN =================\n";
+        cout<< "Nama pengeluaran: "; cin.ignore();
+        getline(cin, klrUang[totalKlr].namaklr); 
+        cout<< "Tanggal pengeluaran: "; 
+        getline(cin, klrUang[totalKlr]. tglKlr);
+        cout<< "Jumlah pengeluaran: "; 
+        cin>> klrUang[totalKlr].jmlKlr;
+        totalKlr++;
+
+        cout<< "\ningin menambah pengeluaran? (y/n)=> ";
+        cin>> tambah;
+    }while(tambah=='y'||tambah=='Y');
+ }
+ //fungsi untuk menmapilkan total pemasukan dan pengeluaran
+ void tampilkanTotal(data *pemasukan, data *pengeluaran){
+ 	cout<< "=========== TOTAL PEMASUKAN DAN PENGELUARAN =========="<< endl;
+    int totalMasuk=0;
+    int totalKeluar=0;
+
+    //hitung total pemasukan
+    for(int i=0; i<totalMsk; i++){
+        totalMasuk += pemasukan[i].jmlMsk;
+    }
+    // hitung total pengeluaran
+    for(int i=0; i<totalKlr; i++){
+        totalKeluar += pengeluaran[i].jmlKlr;
+    }
+
+    cout<< "\nTotal pemasukan  => "<< totalMasuk<< endl;
+    cout<< "\nTotal pengeluaran=> "<< totalKeluar<< endl;
+    cout<< "\nselisih          => "<< totalMasuk-totalKeluar<< endl; 
+ }
+ //fungsi menampilkan persentase pengeluaran
+void persentasePengeluaran(){
+    int totalMasuk=0;
+    int totalKeluar=0;
+
+    //hitung total pemasukan
+    for(int i=0; i<totalMsk; i++){
+        totalMasuk += pemasukan[i].jmlMsk;
+    }
+    // hitung total pengeluaran
+    for(int i=0; i<totalKlr; i++){
+        totalKeluar += pengeluaran[i].jmlKlr;
+    }
+   
+    if(totalKlr>0){
+        double persentasePengeluaran= static_cast<double> (totalKeluar)/ totalMasuk *100;
+        cout<< "\nPersentase pengeluaran => "<< setprecision(2)<< fixed<< persentasePengeluaran<< "%"<< endl;
+    }else{
+        cout<< "Belum ada pemasukan, persentase pengeluaran tidak dapat dihitung."<<endl;
+    }
+}
+//untuk menampilkan pengeluaran terbanyak
+void pengeluaranTerbanyak(data *klrUang, int n){
+	cout<< "=============== PENGELUARAN TERBANYAK ================\n";
+	for(int i=0; i<n-1; i++){
+   		for(int j=0; j<n-i-1; j++){
+        	if(klrUang[j].jmlKlr > klrUang[j+1].jmlKlr){
+            	data temp=klrUang[j];
+            	klrUang[j]=klrUang[j+1];
+            	klrUang[j+1]=temp;
+        	}
+    	}
+   }
+   // Menampilkan pengeluaran terbanyak setelah pengurutan
+    cout << "Pengeluaran Terbanyak:\n";
+    cout << "Nama: " << klrUang[n - 1].namaklr << endl;
+    cout << "Jumlah Pengeluaran: " << klrUang[n - 1].jmlKlr << endl;
+}
+//fungsi untuk menampilkan semua data pemasukan dan pengeluaran
+void tampilkan(data *mskUang, data *klrUang){
+    cout<< "============== PEMASUKAN DAN PENGELUARAN ============\n";
+
+    for(int i=0; i<totalMsk; i++){
+        cout<< "Pemasukan ke- "<<i+1<<endl;
+        cout<< "Nama : "<< mskUang[i].namaPmsk<< endl;
+        cout<< "Tanggal: "<< mskUang[i].tglMsk<< endl;
+        cout<< "Jumlah: "<< mskUang[i].jmlMsk<< endl
+		<<endl;
+
+    }
+    for(int i=0; i<totalKlr; i++){
+    	cout<< "Pengeluaran ke- "<<i+1<<endl;
+        cout<< "Nama : "<<klrUang[i].namaklr<<endl;
+        cout<< "Tanggal : "<<klrUang[i].tglKlr<< endl;
+        cout<< "Jumlah : "<<klrUang[i].jmlKlr<<endl;
+	}
+    cout<< "====================== selesai =========================\n";
+}
+int main(){
+    int pilihan;
+
+    cout<< "PENCATATAN KEUANGAN\n";
+    cout<< "=============================\n";
+    cout<< "1. pencatatan pemasukan keuangan\n";
+    cout<< "2. Pencatatan pengeluaran keuangan.\n";
+    cout<< "3. Total dan selisih.\n";
+    cout<< "4. Persentase pengeluaran.\n";
+    cout<< "5. Pengeluaran.\n";
+    cout<< "6. Tampilkan pemasukan dan pengeluaran.\n";
+    cout<< "0. keluar.\n";
+    cout<< "\npilihan => ";
+    cin>> pilihan;
+
+    while(pilihan!=0){
+        switch(pilihan){
+            case 1: 
+                inputPemasukan(pemasukan);
+                break;
+            case 2:
+                inputPengeluaran(pengeluaran);
+                break;
+            case 3:
+                tampilkanTotal(pemasukan, pengeluaran);
+                break;
+            case 4:
+            cout<< "========== PERSENTASE PENGELUARAN =========\n";
+                persentasePengeluaran();
+                break;
+            case 5:
+                pengeluaranTerbanyak(pengeluaran, totalKlr);// bermasalah
+                break;
+            case 6:
+                tampilkan(pemasukan, pengeluaran);//bermasalah
+                break;
+            default:
+            	cout<< "Pilihan tidak valid. silahkan coba lagi.\n";
+            	break;
+        }
+        cout<< "\npilihan  => ";
+    	cin>> pilihan;
+    }
+    cout<< "Terima Kasih";
+    return 0;
+}
